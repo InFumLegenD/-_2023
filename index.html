@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    td {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #ccc;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .ship {
+      background-color: #3498db;
+    }
+
+    .hit {
+      background-color: #e74c3c;
+    }
+  </style>
+  <title>Морской бой</title>
+</head>
+<body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const boardSize = 10;
+    const board = [];
+    const ships = [
+      { size: 5, direction: 'horizontal', positions: [] },
+      { size: 4, direction: 'vertical', positions: [] },
+      { size: 3, direction: 'horizontal', positions: [] },
+      { size: 3, direction: 'vertical', positions: [] },
+      { size: 2, direction: 'horizontal', positions: [] }
+    ];
+
+    // Инициализируем игровое поле
+    for (let i = 0; i < boardSize; i++) {
+      const row = [];
+      for (let j = 0; j < boardSize; j++) {
+        row.push(0);
+      }
+      board.push(row);
+    }
+
+    // Размещаем корабли на игровом поле
+    function placeShips() {
+      for (const ship of ships) {
+        let validPlacement = false;
+        while (!validPlacement) {
+          const row = Math.floor(Math.random() * boardSize);
+          const col = Math.floor(Math.random() * boardSize);
+          validPlacement = checkValidPlacement(row, col, ship);
+          if (validPlacement) {
+            placeShipOnBoard(row, col, ship);
+          }
+        }
+      }
+    }
+
+    // Проверка возможности размещения корабля в ячейке
+    function checkValidPlacement(row, col, ship) {
+      if (
+        row < 0 || row >= boardSize ||
+        col < 0 || col >= boardSize
+      ) {
+        return false;
+      }
+
+      if (ship.direction === 'horizontal') {
+        if (col + ship.size > boardSize) {
+          return false;
+        }
+
+        for (let i = 0; i < ship.size; i++) {
+          if (board[row][col + i] !== 0) {
+            return false;
+          }
+        }
+      } else {
+        if (row + ship.size > boardSize) {
+          return false;
+        }
+
+        for (let i = 0; i < ship.size; i++) {
+          if (board[row + i][col] !== 0) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }
+
+    // Размещение корабля на поле
+    function placeShipOnBoard(row, col, ship) {
+      if (ship.direction === 'horizontal') {
+        for (let i = 0; i < ship.size; i++) {
+          board[row][col + i] = 1;
+          ship.positions.push({ row, col: col + i });
+        }
+      } else {
+        for (let i = 0; i < ship.size; i++) {
+          board[row + i][col] = 1;
+          ship.positions.push({ row: row + i, col });
+        }
+      }
+    }
+
+    // Рендер поля
+    function renderBoard() {
+      const table = document.createElement('table');
+      for (let i = 0; i < boardSize; i++) {
+        const tr = document.createElement('tr');
+        for (let j = 0; j < boardSize; j++) {
+          const td = document.createElement('td');
+          td.dataset.row = i;
+          td.dataset.col = j;
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+      }
+      document.body.appendChild(table);
+    }
+
+    // Обработка клика по ячейке
+    function handleCellClick(event) {
+      const row = parseInt(event.target.dataset.row);
+      const col = parseInt(event.target.dataset.col);
+      if (board[row][col] === 1) {
+        event.target.classList.add('hit');
+      }
+    }
+
+    renderBoard();
+    placeShips();
+
+    document.querySelectorAll('td').forEach(cell => {
+      cell.addEventListener('click', handleCellClick);
+    });
+  });
+</script>
+
+</body>
+</html>
