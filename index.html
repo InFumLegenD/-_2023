@@ -39,6 +39,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const boardSize = 10;
+    const maxAttempts = 30;
     const board = [];
     const ships = [
       { size: 5, direction: 'horizontal', positions: [] },
@@ -47,6 +48,8 @@
       { size: 3, direction: 'vertical', positions: [] },
       { size: 2, direction: 'horizontal', positions: [] }
     ];
+
+    let attempts = 0;
 
     // Инициализируем игровое поле
     for (let i = 0; i < boardSize; i++) {
@@ -139,10 +142,40 @@
 
     // Обработка клика по ячейке
     function handleCellClick(event) {
+      if (attempts >= maxAttempts) {
+        alert('Игра завершена. Вы использовали все попытки.');
+        return;
+      }
+
       const row = parseInt(event.target.dataset.row);
       const col = parseInt(event.target.dataset.col);
+
       if (board[row][col] === 1) {
         event.target.classList.add('hit');
+        checkVictory();
+      } else {
+        attempts++;
+      }
+
+      if (attempts === maxAttempts) {
+        alert('Игра завершена. Вы использовали все попытки.');
+      }
+    }
+
+    // Проверка попадания по кораблю
+    function checkVictory() {
+      let allShipsHit = true;
+      for (const ship of ships) {
+        for (const position of ship.positions) {
+          if (board[position.row][position.col] !== 2) {
+            allShipsHit = false;
+            break;
+          }
+        }
+      }
+
+      if (allShipsHit) {
+        alert('Поздравляем! Вы победили!');
       }
     }
 
