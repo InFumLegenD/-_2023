@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      position: relative;
+    }
+
+    table {
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+
+    td {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #ccc;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .ship {
+      background-color: #3498db;
+    }
+
+    .hit {
+      background-color: #e74c3c;
+    }
+
+    .remaining-part {
+      background-color: #ccc;
+    }
+
+    #info {
+      font-size: 18px;
+      margin-bottom: 10px;
+	  text-align: center;
+    }
+
+    #score {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 16px;
+    }
+
+    #menu {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .menu-button {
+      cursor: pointer;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    #difficulty-menu {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+	#game-content {
+		flex-grow: 1;
+	}
+
+	#rating-container {
+		width: 200px;
+		padding: 20px;
+		background-color: #f2f2f2;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	}
+
+	#player-rating-list {
+		list-style-type: none;
+		padding: 0;
+	}
+
+	#player-rating-list li {
+		margin-bottom: 10px;
+	}
+
+  </style>
+  <title>Морской бой</title>
+</head>
+<body>
+<script src="game.js"></script>
+	<div id="game-content">
+        <div id="auth-container" style="display: none;">
+			<h2>Авторизация / Регистрация</h2>
+			<label for="username">Имя пользователя:</label>
+			<input type="text" id="username" required>
+			<label for="password">Пароль:</label>
+			<input type="password" id="password" required>
+			<button onclick="login()">Войти</button>
+			<button onclick="register()">Зарегистрироваться</button>
+		</div>
+    </div>
+	<div id="rating-container">
+        <h2>Рейтинг игроков</h2>
+        <ul id="player-rating-list"></ul>
+    </div>
+  
+
+</body>
+</html>
